@@ -1,16 +1,20 @@
 from flask import Flask
+from flask_restplus import Resource, Api
 
 def create_app(debug=False):
     app = Flask(__name__)
     app.debug = debug
     return app
 
-api = create_app()
+app = create_app()
+api = Api(app)
 
-@api.route("/")
-def hello():
-    return "Hello World from Flask in a uWSGI Nginx Docker container with \
-     Python 3.7 (default)"
+@api.route('/hello')
+class HelloWorld(Resource):
+    def get(self):
+        return {
+            'hello': 'world'
+        }
 
 if __name__ == "__main__":
-    api.run(host='0.0.0.0', debug=True, port=80)
+    app.run(host='0.0.0.0', debug=True, port=80)
